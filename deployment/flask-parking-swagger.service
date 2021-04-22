@@ -1,0 +1,16 @@
+[Unit]
+Description=Flask parking application
+After=network.target
+
+[Service]
+Type=simple
+DynamicUser=true
+WorkingDirectory=/var/lib/falsk-parking
+ExecStart=/var/lib/falsk-parking/venv/bin/gunicorn \
+    --bind 0.0.0.0:8000 \
+    --access-logfile - \
+ExecReload=/bin/kill -s HUP $MAINPID
+KillMode=mixed
+
+[Install]
+WantedBy=multi-user.target
