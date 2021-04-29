@@ -1,0 +1,15 @@
+[Unit]
+Description=Flask parking application daemon for http
+After=network.target
+After=mongod.service
+
+[Service]
+Type=simple
+DynamicUser=true
+WorkingDirectory=/var/lib/falsk-parking
+ExecStart=/var/lib/falsk-parking/venv/bin/gunicorn \
+    --bind 0.0.0.0:8012 wsgi:app \
+    --access-logfile - \
+
+[Install]
+WantedBy=multi-user.target

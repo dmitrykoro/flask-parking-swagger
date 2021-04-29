@@ -1,0 +1,22 @@
+[Unit]
+Description=Flask parking application daemon
+After=network.target
+After=mongod.service
+
+[Service]
+Type=simple
+DynamicUser=true
+WorkingDirectory=/var/lib/falsk-parking
+ExecStartPre=+/usr/bin/chown -R $USER \
+             /var/lib/falsk-parking/keys/littledima.duckdns.org.cer  \
+             /var/lib/falsk-parking/keys/littledima.duckdns.org.key \
+             /var/lib/falsk-parking/keys/ca.cer
+ExecStart=/var/lib/falsk-parking/venv/bin/gunicorn \
+    --certfile=/var/lib/falsk-parking/keys/littledima.duckdns.org.cer  \
+    --keyfile= /var/lib/falsk-parking/keys/littledima.duckdns.org.key \
+    --ca-cert=  /var/lib/falsk-parking/keys/ca.cer \
+    --bind 0.0.0.0:8013 wsgi:app \
+    --access-logfile -
+
+[Install]
+WantedBy=multi-user.target
